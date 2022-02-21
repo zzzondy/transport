@@ -1,6 +1,5 @@
 package exceptions;
 
-import java.io.File;
 import java.io.FileReader;
 import java.util.*;
 
@@ -11,29 +10,33 @@ class SimpleCalculator {
         String[] array = sc.nextLine().split(" ");
         try {
             double num1 = Double.parseDouble(array[0]), num2 = Double.parseDouble(array[2]);
-            operation(array[1]);
-            divisionByZero(num2);
-            if (array[1].equals("+"))
-                System.out.println(num1 + num2);
-            else if (array[1].equals("*"))
-                System.out.println(num1 * num2);
-            else if (array[1].equals("/"))
-                System.out.println(num1 / num2);
-            else if (array[1].equals("-"))
-                System.out.println(num1 - num2);
+            switch (array[1]) {
+                case "-":
+                    System.out.println(num1 - num2);
+                    break;
+                case "+":
+                    System.out.println(num1 + num2);
+                    break;
+                case "*":
+                    System.out.println(num1 * num2);
+                    break;
+                case "/":
+                    if (num2 == 0) {
+                        throw new ArithmeticException();
+                    }
+                    else {
+                        System.out.println(num1 / num2);
+                        break;
+                    }
+                default:
+                    throw new UnsupportedOperationException();
+            }
         } catch (NumberFormatException ex) {
             System.out.println("Error! Not number");
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+        } catch (UnsupportedOperationException exception) {
+            System.out.println("Operation Error!");
+        } catch (ArithmeticException e) {
+            System.out.println("Error! Division by zero");
         }
-    }
-
-    static void divisionByZero(double num) throws Exception {
-        if (num == 0) throw new Exception("Error! Division by zero");
-    }
-
-    static void operation(String text) throws Exception {
-        if (!text.equals("+") && !text.equals("/") && !text.equals("-") && !text.equals("*"))
-            throw new Exception("Operation Error!");
     }
 }
